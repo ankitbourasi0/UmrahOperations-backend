@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +28,7 @@ public class VisaFollowupService {
 
     @Autowired
     VisaFollowupWithAgentRepository visaFollowupWithAgentRepository;
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     private static final Logger logger = LoggerFactory.getLogger(VisaFollowupService.class);
     public List<VisaFollowupDTO> getVisaFollowups(Long eaCode) throws Exception {
@@ -50,31 +52,85 @@ public class VisaFollowupService {
         return followupDTOList;
     }
 
-    public List<VisaRequestWithAgentDTO> getVisaRequestsByEaCode(Long eaCode) {
-        List<VisaFollowupWithAgent> visaRequests = visaFollowupWithAgentRepository.findVisaRequestsByEaCode(eaCode);
-        return visaRequests.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+    public List<VisaRequestWithAgentDTO> getVisaFollowupsWithAgent(Long eaCode) throws Exception {
+        logger.info("Fetching in Service");
+
+        List<Object[]> listWithAgent = visaFollowupWithAgentRepository.findByAgentAndEaCode(eaCode);
+        logger.info("With Agent List size: {}", listWithAgent.size());
+
+        if (listWithAgent.isEmpty()) {
+            throw new Exception("Agent List Empty");
+        }
+
+        List<VisaRequestWithAgentDTO> followupWithAgentList = new ArrayList<>();
+
+        for (Object[] objects : listWithAgent) {
+            try {
+                VisaRequestWithAgentDTO followupWithAgent = VisaRequestWithAgentDTO.builder()
+                        .vrId(parseInteger(objects[0]))
+                        .travelDate(parseLocalDate(objects[1]))
+                        .eaCode(parseInteger(objects[2]))
+                        .agentName(objects[3] != null ? objects[3].toString() : null)
+                        .visaPriceId(parseInteger(objects[5]))
+                        .visaType(objects[6] != null ? objects[6].toString() : null)
+                        .countryName(objects[8] != null ? objects[8].toString() : null)
+                        .visaRequest(objects[10] != null ? objects[10].toString() : null)
+                        .vrTotalPax(parseInteger(objects[19]))
+                        .vrTotalSourceAmount(parseBigDecimal(objects[26]))
+                        .vrTotalAgentAmount(parseBigDecimal(objects[28]))
+                        .vrStatus(parseInteger(objects[30]))
+                        .build();
+
+                followupWithAgentList.add(followupWithAgent);
+            } catch (Exception e) {
+                logger.error("Error mapping record: {}", Arrays.toString(objects), e);
+                // Continue processing other records even if one fails
+                continue;
+            }
+        }
+
+        if (followupWithAgentList.isEmpty()) {
+            throw new Exception("No records could be processed successfully");
+        }
+
+        return followupWithAgentList;
     }
 
-    private VisaRequestWithAgentDTO convertToDTO(VisaFollowupWithAgent visaRequest) {
-        return VisaRequestWithAgentDTO.builder()
-                .vrId(visaRequest.getVrId())
-                .travelDate(visaRequest.getTravelDate())
-                .eaCode(visaRequest.getEaCode())
-                .agentName(visaRequest.getAgentName())
-                .visaPriceId(visaRequest.getVisaPriceId())
-                .visaType(visaRequest.getVisaType())
-                .countryName(visaRequest.getCountryName())
-                .visaRequest(visaRequest.getVisaRequest())
-                .vrTotalPax(visaRequest.getVrTotalPax())
-                .vrTotalSourceAmount(visaRequest.getVrTotalSourceAmount())
-                .vrTotalAgentAmount(visaRequest.getVrTotalAgentAmount())
-                .vrStatus(visaRequest.getVrStatus())
-                .build();
+    private Integer parseInteger(Object value) {
+        if (value == null) return null;
+        if (value instanceof Integer) return (Integer) value;
+        if (value instanceof Long) return ((Long) value).intValue();
+        try {
+            return Integer.valueOf(value.toString());
+        } catch (NumberFormatException e) {
+            logger.warn("Failed to parse integer value: {}", value);
+            return null;
+        }
     }
 
+    private LocalDate parseLocalDate(Object value) {
+        if (value == null) return null;
+        if (value instanceof LocalDate) return (LocalDate) value;
+        try {
+            String dateStr = value.toString().trim();
+            return LocalDate.parse(dateStr, DATE_FORMATTER);
+        } catch (Exception e) {
+            logger.warn("Failed to parse date value: {}", value);
+            return null;
+        }
+    }
 
+    private BigDecimal parseBigDecimal(Object value) {
+        if (value == null) return null;
+        if (value instanceof BigDecimal) return (BigDecimal) value;
+        try {
+            String numStr = value.toString().replaceAll("[^\\d.]", "");
+            return new BigDecimal(numStr);
+        } catch (NumberFormatException e) {
+            logger.warn("Failed to parse decimal value: {}", value);
+            return null;
+        }
+    }
 }
 
 

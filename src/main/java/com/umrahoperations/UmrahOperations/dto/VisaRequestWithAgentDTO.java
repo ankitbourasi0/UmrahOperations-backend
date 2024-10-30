@@ -1,4 +1,5 @@
 package com.umrahoperations.UmrahOperations.dto;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,12 +13,13 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VisaRequestWithAgentDTO {
-
-    private Long vrId;
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate travelDate;
-    private Long eaCode;
+
+    private Integer vrId;
+    private Integer eaCode;
     private String agentName;
-    private Long visaPriceId;
+    private Integer visaPriceId;
     private String visaType;
     private String countryName;
     private String visaRequest;

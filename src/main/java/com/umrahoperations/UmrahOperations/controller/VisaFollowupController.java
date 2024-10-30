@@ -4,7 +4,6 @@ import com.umrahoperations.UmrahOperations.dto.VisaFollowupDTO;
 import com.umrahoperations.UmrahOperations.dto.VisaRequestWithAgentDTO;
 import com.umrahoperations.UmrahOperations.model.VisaFollowupWithAgent;
 import com.umrahoperations.UmrahOperations.service.VisaFollowupService;
-import com.umrahoperations.UmrahOperations.service.VisaRequestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +19,6 @@ public class VisaFollowupController {
 
     @Autowired
     private VisaFollowupService visaFollowupService;
-
-
-
     private static final Logger logger = LoggerFactory.getLogger(VisaFollowupController.class);
 
 
@@ -45,15 +41,23 @@ public class VisaFollowupController {
         }
     }
 
-//    @GetMapping("/with-agent/{eacode}")
-//    public ResponseEntity<List<VisaFollowupWithAgent>> getVisaRequests(@PathVariable Long eacode) {
-//        return ResponseEntity.ok(visaFollowupService.getVisaRequestsByEaCode(eacode));
-//    }
+    @GetMapping("/with-agent/{eacode}")
+    public ResponseEntity<List<VisaRequestWithAgentDTO>> getVisaFollowupsWithAgent(@PathVariable Long eacode) {
+        try {
+            logger.info("Fetching with Agent for EA Code: {}", eacode);
+            List<VisaRequestWithAgentDTO> listWithAgent = visaFollowupService.getVisaFollowupsWithAgent(eacode);
 
+            if (listWithAgent.isEmpty()) {
+                logger.warn("No records found for EA Code: {}", eacode);
+                return ResponseEntity.noContent().build();
+            }
 
-    @GetMapping("/by-ea-code/{eaCode}")
-    public ResponseEntity<List<VisaRequestWithAgentDTO>> getVisaRequestsByEaCode(@PathVariable Long eaCode) {
-        List<VisaRequestWithAgentDTO> visaRequests = visaFollowupService.getVisaRequestsByEaCode(eaCode);
-        return ResponseEntity.ok(visaRequests);
+            logger.info("Found {} records", listWithAgent.size());
+            return ResponseEntity.ok(listWithAgent);
+
+        } catch (Exception e) {
+            logger.error("Error fetching visa followups with agent for EA Code: {}", eacode, e);
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }

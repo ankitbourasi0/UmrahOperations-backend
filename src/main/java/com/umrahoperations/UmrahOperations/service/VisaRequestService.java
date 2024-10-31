@@ -170,5 +170,13 @@ public class VisaRequestService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    public boolean deleteVisaRequest(VisaRequestDTO visa)
+    {
+    	VisaRequest v = new VisaRequest();
+    	v.setVrId(visa.getVrId());
+    	visaRequestRepository.delete(v);
+    	return true;
+    	
+    }
 
 }

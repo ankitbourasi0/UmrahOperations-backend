@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VisaRequestDTO {
+	private Long vrId;
     private Long visaPriceId;  // matches with VR_VISA_PRICE_ID
     private LocalDate requestDate;
     private Long agentCode;

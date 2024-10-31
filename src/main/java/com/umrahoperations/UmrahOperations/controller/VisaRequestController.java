@@ -39,4 +39,20 @@ public class VisaRequestController {
                     .body(new ErrorResponse("Failed to create visa request. Please try again later."));
         }
     }
+    
+    
+    @PostMapping("/delete")
+    public ResponseEntity<?> deleteVisaRequestRecord(@RequestBody VisaRequestDTO visa)
+    {
+    	try {
+    		boolean check = visaRequestService.deleteVisaRequest(visa);
+        	return ResponseEntity.ok(check);
+		} catch (Exception e) {
+			 log.error("Error creating visa request", e);
+	            return ResponseEntity
+	                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                    .body(new ErrorResponse("Failed to create visa request. Please try again later."));
+		}
+    	
+    }
 }

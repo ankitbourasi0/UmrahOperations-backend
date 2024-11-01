@@ -25,4 +25,5 @@ public class VisaRequestDTO {
     private BigDecimal currencyRate;
     private Long supplierId;
     private List<TravellerDTO> travellers;
+    private Integer visaStatus;
 }

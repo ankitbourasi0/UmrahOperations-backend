@@ -178,5 +178,11 @@ public class VisaRequestService {
     	return true;
     	
     }
-
+    public boolean updateVisaStatus(VisaRequestDTO visa)
+    {
+    	
+    	visaRequestRepository.updateVisaRequestStatus(visa.getVisaStatus(),visa.getVrId());
+    	return true;
+    	
+    }
 }

@@ -22,6 +22,7 @@ public class VisaRequestController {
         this.visaRequestService = visaRequestService;
     }
 
+    
     @PostMapping
     public ResponseEntity<?> createVisaRequest(@RequestBody VisaRequestDTO requestDTO) {
         try {
@@ -48,6 +49,20 @@ public class VisaRequestController {
             log.info("Deleting visa request record for vrId: " + vrId);
     		boolean check = visaRequestService.deleteVisaRequest(vrId);
             log.info("Delete Check " + check);
+        	return ResponseEntity.ok(check);
+		} catch (Exception e) {
+			 log.error("Error creating visa request", e);
+	            return ResponseEntity
+	                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                    .body(new ErrorResponse("Failed to create visa request. Please try again later."));
+		}
+    	
+    }
+    @PostMapping("/updateStatus")
+    public ResponseEntity<?> updateVisaStatus(@RequestBody VisaRequestDTO visa)
+    {
+    	try {
+    		boolean check = visaRequestService.updateVisaStatus(visa);
         	return ResponseEntity.ok(check);
 		} catch (Exception e) {
 			 log.error("Error creating visa request", e);

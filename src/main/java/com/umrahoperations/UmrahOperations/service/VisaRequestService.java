@@ -170,10 +170,10 @@ public class VisaRequestService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public boolean deleteVisaRequest(VisaRequestDTO visa)
+    public boolean deleteVisaRequest(Long vrId)
     {
     	VisaRequest v = new VisaRequest();
-    	v.setVrId(visa.getVrId());
+    	v.setVrId(vrId);
     	visaRequestRepository.delete(v);
     	return true;
     	

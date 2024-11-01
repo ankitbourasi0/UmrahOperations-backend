@@ -41,11 +41,13 @@ public class VisaRequestController {
     }
     
     
-    @PostMapping("/delete")
-    public ResponseEntity<?> deleteVisaRequestRecord(@RequestBody VisaRequestDTO visa)
+    @DeleteMapping("/delete/{vrId}")
+    public ResponseEntity<?> deleteVisaRequestRecord(@PathVariable Long vrId)
     {
     	try {
-    		boolean check = visaRequestService.deleteVisaRequest(visa);
+            log.info("Deleting visa request record for vrId: " + vrId);
+    		boolean check = visaRequestService.deleteVisaRequest(vrId);
+            log.info("Delete Check " + check);
         	return ResponseEntity.ok(check);
 		} catch (Exception e) {
 			 log.error("Error creating visa request", e);

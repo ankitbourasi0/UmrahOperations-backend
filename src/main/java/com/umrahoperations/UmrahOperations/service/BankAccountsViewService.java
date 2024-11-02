@@ -12,15 +12,16 @@ import com.umrahoperations.UmrahOperations.repository.BankAccountsViewRepository
 public class BankAccountsViewService {
 	
 	
-	@Autowired
+	
 	BankAccountsViewRepository		repository;
 	
+	@Autowired
 	public BankAccountsViewService(BankAccountsViewRepository		repository) {
 		this.repository = repository;
 	}
 
-	public List<BankAccountsView> getBankAccounts()
+	public List<BankAccountsView> getBankAccounts(Long entityId)
 	{
-		return repository.findAll();
+		return repository.findByEaCode(entityId);
 	}
 }

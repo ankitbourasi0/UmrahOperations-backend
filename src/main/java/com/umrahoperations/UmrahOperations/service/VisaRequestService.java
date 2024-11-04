@@ -178,11 +178,15 @@ public class VisaRequestService {
     	return true;
     	
     }
-    public boolean updateVisaStatus(VisaRequestDTO visa)
+    public boolean updateVisaStatus(Long vrId, Integer status)
     {
-    	
-    	visaRequestRepository.updateVisaRequestStatus(visa.getVisaStatus(),visa.getVrId());
-    	return true;
+        try {
+            int updatedRows = visaRequestRepository.updateVisaRequestStatus(status, vrId);
+            return updatedRows > 0;
+        } catch (Exception e) {
+            log.error("Error updating visa status for ID: " + vrId, e);
+            return false;
+        }
     	
     }
 }

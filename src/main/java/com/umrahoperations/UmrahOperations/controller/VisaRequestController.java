@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/visa-requests")
 @Slf4j
@@ -58,11 +60,16 @@ public class VisaRequestController {
 		}
     	
     }
-    @PostMapping("/updateStatus")
-    public ResponseEntity<?> updateVisaStatus(@RequestBody VisaRequestDTO visa)
+    @PutMapping("/updateStatus")
+    public ResponseEntity<?> updateVisaStatus(@RequestBody  Map<String, Object> request)
     {
     	try {
-    		boolean check = visaRequestService.updateVisaStatus(visa);
+
+            Long vrId = Long.parseLong(request.get("vrId").toString());
+            Integer status = Integer.parseInt(request.get("status").toString());
+            log.info("Updating status of visa request ID: {} to status: {}", vrId, status);
+    		boolean check = visaRequestService.updateVisaStatus(vrId, status);
+            log.info("Update status: {}", check);
         	return ResponseEntity.ok(check);
 		} catch (Exception e) {
 			 log.error("Error creating visa request", e);

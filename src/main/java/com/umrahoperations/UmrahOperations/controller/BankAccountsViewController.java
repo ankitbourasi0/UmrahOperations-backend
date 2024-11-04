@@ -37,8 +37,7 @@ public class BankAccountsViewController {
 			//System.out.println(list);
 			return ResponseEntity.ok(list);
 		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.ok(e.getMessage());
+			return ResponseEntity.notFound().build();
 		}
 		
 		

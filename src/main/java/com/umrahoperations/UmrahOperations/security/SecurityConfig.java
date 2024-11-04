@@ -22,7 +22,20 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for stateless APIs
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS)) // Stateless session
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login","/api/auth/verify", "/api/currency","/api/extravisaprice","/api/visa-requests","/api/visa-followups/{eacode}", "/api/visa-followups/with-agent/{eacode}","/api/visa-requests/delete/{vrId}", "/api/visa-requests/updateStatus","/api/wallet/{entityId}","/api/paymentmode","/api/accounts/list/{eaCode}").permitAll() // Allow login without authentication
+                        .requestMatchers("/api/auth/login",
+                                "/api/auth/verify",
+                                "/api/currency",
+                                "/api/extravisaprice",
+                                "/api/visa-requests",
+                                "/api/visa-followups/{eacode}",
+                                "/api/visa-followups/with-agent/{eacode}",
+                                "/api/visa-requests/delete/{vrId}",
+                                "/api/visa-requests/updateStatus",
+                                "/api/wallet/{entityId}",
+                                "/api/paymentmode",
+                                "/api/accounts/list/{eaCode}",
+                                "/api/lookups/bankAccounts/{entityId}",
+                                "/api/wallets").permitAll() // Allow login without authentication
                         .anyRequest().authenticated() // Require authentication for other requests
                 );
 

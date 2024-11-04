@@ -7,17 +7,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.Date;
 
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "WALLET_MASTER")
+@SequenceGenerator(name="USER_SEQUENCE_GENERATOR", sequenceName="WALLET_SEQ", initialValue=100001, allocationSize=1)
 public class WalletMaster {
+	
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "WM_ID")
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="USER_SEQUENCE_GENERATOR")
     private Long wmId;
 
     @Column(name = "WM_DATE")

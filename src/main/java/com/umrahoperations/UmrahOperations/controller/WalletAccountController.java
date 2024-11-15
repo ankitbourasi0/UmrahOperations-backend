@@ -24,9 +24,9 @@ public class WalletAccountController {
            var walletList = walletTransactionService.getWalletAccountList(eaCode);
             return ResponseEntity.ok(walletList);
         }catch (Exception e){
-            e.printStackTrace();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-      return   ResponseEntity.notFound().build();
+
 
 
     }

@@ -26,7 +26,7 @@ public class BankAccountsViewService {
 	public List<BankAccountsView> getBankAccounts(Long entityId) throws EmptyListException
 	{
 		log.info("getBankAccounts Fetching with: {}", entityId);
-		var bankAccount  = repository.findByEaCode(entityId);
+		List<BankAccountsView> bankAccount  = repository.findByEaCode(entityId);
 					if (bankAccount.isEmpty()){
 						throw new EmptyListException("Bank Account not Found");
 					}

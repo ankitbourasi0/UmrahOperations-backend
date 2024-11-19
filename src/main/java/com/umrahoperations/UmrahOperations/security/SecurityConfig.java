@@ -39,7 +39,8 @@ public class SecurityConfig {
                                 "/api/countries",
                                 "/api/accounts/list/{eaCode}",
                                 "/api/lookups/bankAccounts/{entityId}",
-                                "/api/wallets").permitAll() // Allow login without authentication
+                                "/api/wallets",
+                                    "/api/book-hotel-data").permitAll() // Allow login without authentication
                         .anyRequest().authenticated() // Require authentication for other requests
                 );
 

@@ -7,6 +7,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,8 +22,14 @@ public class HotelService {
         return hotelRepository.findAll();
     }
 
-    public List<HotelRoomDTO> getHotelRoomData() {
-        List<Object[]> data = hotelRepository.getHotelRoomData();
+    public List<HotelRoomDTO> getHotelRoomData(String checkInDate, String checkOutDate) {
+        // Calculate number of nights
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate startDate = LocalDate.parse(checkInDate, formatter);
+        LocalDate endDate = LocalDate.parse(checkOutDate, formatter);
+        int nights = (int) ChronoUnit.DAYS.between(startDate, endDate);
+
+        List<Object[]> data = hotelRepository.getHotelRoomData(checkInDate, checkOutDate, nights);
         return data.stream()
                 .map(row -> new HotelRoomDTO(
                         ((Number) row[0]).intValue(),
@@ -44,20 +53,15 @@ public class HotelService {
                 ))
                 .collect(Collectors.toList());
     }
-    public BookHotelData getBookHotelDataById(Long id) {
-        return hotelRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Book Hotel Data not found with ID: " + id));
-    }
-
     public BookHotelData createBookHotelData(BookHotelData bookHotelData) {
         return hotelRepository.save(bookHotelData);
     }
 
-    public BookHotelData updateBookHotelData(Long id, BookHotelData bookHotelData) {
-        BookHotelData existingBookHotelData = getBookHotelDataById(id);
-        // Update the existing entity with the new data
-        return hotelRepository.save(existingBookHotelData);
-    }
+//    public BookHotelData updateBookHotelData(Long id, BookHotelData bookHotelData) {
+//        BookHotelData existingBookHotelData = getBookHotelDataById(id);
+//        // Update the existing entity with the new data
+//        return hotelRepository.save(existingBookHotelData);
+//    }
 
     public void deleteBookHotelData(Long id) {
         hotelRepository.deleteById(id);

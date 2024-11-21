@@ -19,25 +19,27 @@ public class HotelController {
         return hotelService.getAllBookHotelData();
     }
 
-
     @GetMapping("/hotel-room")
-    public List<HotelRoomDTO> getHotelRoomData() {
-        return hotelService.getHotelRoomData();
+    public List<HotelRoomDTO> getHotelRoomData(
+            @RequestParam String checkInDate,
+            @RequestParam String checkOutDate
+    ) {
+        return hotelService.getHotelRoomData(checkInDate, checkOutDate);
     }
-    @GetMapping("/{id}")
-    public BookHotelData getBookHotelDataById(@PathVariable Long id) {
-        return hotelService.getBookHotelDataById(id);
-    }
+//    @GetMapping("/{id}")
+//    public BookHotelData getBookHotelDataById(@PathVariable Long id) {
+//        return hotelService.getBookHotelDataById(id);
+//    }
 
     @PostMapping
     public BookHotelData createBookHotelData(@RequestBody BookHotelData bookHotelData) {
         return hotelService.createBookHotelData(bookHotelData);
     }
 
-    @PutMapping("/{id}")
-    public BookHotelData updateBookHotelData(@PathVariable Long id, @RequestBody BookHotelData bookHotelData) {
-        return hotelService.updateBookHotelData(id, bookHotelData);
-    }
+//    @PutMapping("/{id}")
+//    public BookHotelData updateBookHotelData(@PathVariable Long id, @RequestBody BookHotelData bookHotelData) {
+//        return hotelService.updateBookHotelData(id, bookHotelData);
+//    }
 
     @DeleteMapping("/{id}")
     public void deleteBookHotelData(@PathVariable Long id) {

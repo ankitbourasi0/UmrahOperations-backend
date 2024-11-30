@@ -15,7 +15,7 @@ public interface HotelRepository extends JpaRepository<BookHotelData, Long> {
                     "NVL((SELECT MAX(hri_image) FROM hotel_room_images WHERE hri_hm_id = hrpd_hotel_id AND hri_rt_id = hrpd_room_type), hm_logo) AS room_type_image, " +
                     "hrpd_meals, lm_name_la AS meals_la, lm_name_la AS meals_ar, " +
                     "SUM(NVL(hrpd_purchase, 0)) AS pur_amount, " +
-                    "SUM(hrpd_sale * :nights) AS sale_amount, " +
+                    "SUM(hrpd_sale) AS sale_amount, " +
                     "hrpd_room_view, hrpd_sharing, lhs_name_la AS sharing_la, lhs_name_ar AS sharing_ar, hv_name_la, hv_name_ar, " +
                     "NVL(hrpd_supplier, hrpd_owner) AS hrpd_supplier " +
                     "FROM " +
@@ -42,7 +42,7 @@ public interface HotelRepository extends JpaRepository<BookHotelData, Long> {
     )
     List<Object[]> getHotelRoomData(
             @Param("checkInDate") String checkInDate,
-            @Param("checkOutDate") String checkOutDate,
-            @Param("nights") int nights
+            @Param("checkOutDate") String checkOutDate
+
     );
 }

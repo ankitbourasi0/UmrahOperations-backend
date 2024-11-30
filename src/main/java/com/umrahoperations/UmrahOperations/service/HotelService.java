@@ -33,12 +33,12 @@ public class HotelService {
 
     public List<HotelRoomDTO> getHotelRoomData(String checkInDate, String checkOutDate) {
         // Calculate number of nights
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate startDate = LocalDate.parse(checkInDate, formatter);
-        LocalDate endDate = LocalDate.parse(checkOutDate, formatter);
-        int nights = (int) ChronoUnit.DAYS.between(startDate, endDate);
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+//        LocalDate startDate = LocalDate.parse(checkInDate, formatter);
+//        LocalDate endDate = LocalDate.parse(checkOutDate, formatter);
+//        int nights = (int) ChronoUnit.DAYS.between(startDate, endDate);
 
-        List<Object[]> data = hotelRepository.getHotelRoomData(checkInDate, checkOutDate, nights);
+        List<Object[]> data = hotelRepository.getHotelRoomData(checkInDate, checkOutDate);
         return data.stream()
                 .map(row -> new HotelRoomDTO(
                         ((Number) row[0]).intValue(),

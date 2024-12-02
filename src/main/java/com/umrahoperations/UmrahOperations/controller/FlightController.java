@@ -1,5 +1,6 @@
 package com.umrahoperations.UmrahOperations.controller;
 
+import com.umrahoperations.UmrahOperations.model.Airlines_Flights_Details;
 import com.umrahoperations.UmrahOperations.model.Flight;
 import com.umrahoperations.UmrahOperations.service.FlightService;
 import lombok.RequiredArgsConstructor;
@@ -20,5 +21,10 @@ public class FlightController {
     @GetMapping()
     public List<Flight> findAllAirports() {
         return flightService.findAllAirports();
+    }
+
+    @GetMapping("/airlines-details")
+    public List<Airlines_Flights_Details> getAirlinesFlightsDetails() {
+        return flightService.getAirlinesFlightsDetails();
     }
 }

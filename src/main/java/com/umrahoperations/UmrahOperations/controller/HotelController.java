@@ -28,9 +28,11 @@ public class HotelController {
     @GetMapping("/hotel-room")
     public List<HotelRoomDTO> getHotelRoomData(
             @RequestParam String checkInDate,
-            @RequestParam String checkOutDate
+            @RequestParam String checkOutDate,
+            @RequestParam Long hotelId,
+            @RequestParam Long supplierId
     ) {
-        return hotelService.getHotelRoomData(checkInDate, checkOutDate);
+        return hotelService.getHotelRoomData(checkInDate, checkOutDate,hotelId, supplierId);
     }
 
     @PostMapping("/hotel-room")

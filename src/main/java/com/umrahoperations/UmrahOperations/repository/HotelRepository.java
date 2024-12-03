@@ -30,8 +30,8 @@ public interface HotelRepository extends JpaRepository<BookHotelData, Long> {
                     "AND hrpd_hotel_id = hm_id " +
                     "AND hrpd_room_type = rt_id " +
                     "AND hrpd_meals = lm_id " +
-                    "AND hrpd_hotel_id = 1000204 " +
-                    "AND NVL(hrpd_supplier, hrpd_owner) = 20005581 " +
+                    "AND hrpd_hotel_id = :hotelId " +
+                    "AND NVL(hrpd_supplier, hrpd_owner) = :supplierId  " +
                     "AND hrpd_room_view = hv_id " +
                     "AND hrpd_sharing = lhs_id " +
                     "GROUP BY " +
@@ -42,7 +42,9 @@ public interface HotelRepository extends JpaRepository<BookHotelData, Long> {
     )
     List<Object[]> getHotelRoomData(
             @Param("checkInDate") String checkInDate,
-            @Param("checkOutDate") String checkOutDate
+            @Param("checkOutDate") String checkOutDate,
+            @Param("hotelId") Long hotelId,
+            @Param("supplierId") Long supplierId
 
     );
 }

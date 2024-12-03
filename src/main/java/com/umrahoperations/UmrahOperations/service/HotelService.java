@@ -31,14 +31,14 @@ public class HotelService {
         return hotelRepository.findAll();
     }
 
-    public List<HotelRoomDTO> getHotelRoomData(String checkInDate, String checkOutDate) {
+    public List<HotelRoomDTO> getHotelRoomData(String checkInDate, String checkOutDate, Long hotelId, Long supplierId) {
         // Calculate number of nights
 //        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 //        LocalDate startDate = LocalDate.parse(checkInDate, formatter);
 //        LocalDate endDate = LocalDate.parse(checkOutDate, formatter);
 //        int nights = (int) ChronoUnit.DAYS.between(startDate, endDate);
 
-        List<Object[]> data = hotelRepository.getHotelRoomData(checkInDate, checkOutDate);
+        List<Object[]> data = hotelRepository.getHotelRoomData(checkInDate, checkOutDate,hotelId, supplierId);
         return data.stream()
                 .map(row -> new HotelRoomDTO(
                         ((Number) row[0]).intValue(),

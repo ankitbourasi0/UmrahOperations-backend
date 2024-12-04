@@ -29,20 +29,23 @@ public class FlightController {
         return flightService.findAllAirports();
     }
 
-    @GetMapping("/airlines-details")
+   /* @GetMapping("/airlines-details")
     public List<Airlines_Flights_Details> getAirlinesFlightsDetails() {
         return flightService.getAirlinesFlightsDetails();
-    }
+    }*/
 
     @GetMapping("/current-month")
     public ResponseEntity<List<AirlinesFlight>> getCurrentMonthFlights(
-            @RequestParam(value = "referenceDate", defaultValue = "15-12-2024") String referenceDate) {
+            @RequestParam(value = "referenceDate", defaultValue = "15-12-2024") String referenceDate,
+            @RequestParam(value = "fromCity", defaultValue = "101881") Long fromCity,
+            @RequestParam(value = "toCity", defaultValue = "103061") Long toCity
+            ) {
         log.info("REST request to get current month flights after date: {}", referenceDate);
-        List<AirlinesFlight> flights = flightService.getCurrentMonthFlightsAfterDate(referenceDate);
+        List<AirlinesFlight> flights = flightService.getCurrentMonthFlightsAfterDate(referenceDate,fromCity,toCity);
         return ResponseEntity.ok(flights);
     }
 
-    @GetMapping("/id")
+   /* @GetMapping("/id")
     public ResponseEntity<List<Airlines_Flights_Details>> getAirlinesFlightsDetailsById(@RequestParam Long afs_service_id) {
         log.info("REST request to get  flights by Id: {}", afs_service_id);
 
@@ -57,4 +60,5 @@ public class FlightController {
         var flights = flightService.getFlightSearchFareByServiceId(serviceId);
         return ResponseEntity.ok(flights);
     }
+    */
 }

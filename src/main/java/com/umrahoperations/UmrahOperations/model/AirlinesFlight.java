@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -41,4 +42,11 @@ public class AirlinesFlight {
 
     @Column(name = "DAYS")
     private Integer days;
+    
+    @Transient
+    public List<Airlines_Flights_Details> lstAirlinesFlightDetails;
+    
+    @Transient
+    public List<FlightSearchFare> lstFlightSearchFare;
+    
 }

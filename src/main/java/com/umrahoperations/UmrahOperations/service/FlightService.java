@@ -1,5 +1,13 @@
 package com.umrahoperations.UmrahOperations.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.umrahoperations.UmrahOperations.model.AirlinesFlight;
 import com.umrahoperations.UmrahOperations.model.Airlines_Flights_Details;
 import com.umrahoperations.UmrahOperations.model.Flight;
@@ -8,18 +16,9 @@ import com.umrahoperations.UmrahOperations.repository.AirlineFlightDetailsReposi
 import com.umrahoperations.UmrahOperations.repository.AirlinesFlightRepository;
 import com.umrahoperations.UmrahOperations.repository.FlightRepository;
 import com.umrahoperations.UmrahOperations.repository.FlightSearchFareRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Slf4j
@@ -36,7 +35,7 @@ public class FlightService {
 
     private final FlightSearchFareRepository flightSearchFareRepository;;
 
-    public   List<AirlinesFlight> getCurrentMonthFlightsAfterDate(String referenceDate) {
+    public   List<AirlinesFlight> getCurrentMonthFlightsAfterDate(String referenceDate,Long fromCity,Long toCity) {
         try {
             // Validate the date format
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -45,7 +44,15 @@ public class FlightService {
             log.info("Fetching flights for current month after date: {}", referenceDate);
             log.debug("Parsed date: {}", parsedDate);
 
-            var flights = airlinesFlightRepository.findFlightsForCurrentMonthAfterDateNative(referenceDate);
+            List<AirlinesFlight> flights = airlinesFlightRepository.findFlightsForCurrentMonthAfterDateNative(referenceDate,fromCity,toCity);
+            for(AirlinesFlight afs : flights)
+			{
+            	Long serviceId = afs.getAsId();
+            	List<Airlines_Flights_Details> airlinesFlightsDetailsById = airlineFlightDetailsRepository.getAirlinesFlightsDetailsById(serviceId);
+            	afs.setLstAirlinesFlightDetails(airlinesFlightsDetailsById);
+            	List<FlightSearchFare> flightSearchFareByServiceId = flightSearchFareRepository.getFlightSearchFareByServiceId(serviceId);
+            	afs.setLstFlightSearchFare(flightSearchFareByServiceId);
+			}
             log.debug("Found {} flights", flights.size());
             return flights;
         } catch (DateTimeParseException e) {
@@ -59,7 +66,7 @@ public class FlightService {
         return flightRepository.findAllAirports();
     }
 
-    public List<Airlines_Flights_Details> getAirlinesFlightsDetails() {
+   /* public List<Airlines_Flights_Details> getAirlinesFlightsDetails() {
         return airlineFlightDetailsRepository.getAirlinesFlightsDetails();
     }
 
@@ -70,5 +77,5 @@ public class FlightService {
     public List<FlightSearchFare> getFlightSearchFareByServiceId(Long serviceId) {
         return flightSearchFareRepository.getFlightSearchFareByServiceId(serviceId);
     }
-
+*/
 }

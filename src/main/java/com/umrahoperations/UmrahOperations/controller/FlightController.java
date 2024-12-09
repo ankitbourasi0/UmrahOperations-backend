@@ -1,5 +1,6 @@
 package com.umrahoperations.UmrahOperations.controller;
 
+import com.umrahoperations.UmrahOperations.dto.PassportDTO;
 import com.umrahoperations.UmrahOperations.model.AirlinesFlight;
 import com.umrahoperations.UmrahOperations.model.Airlines_Flights_Details;
 import com.umrahoperations.UmrahOperations.model.Flight;
@@ -43,6 +44,13 @@ public class FlightController {
         log.info("REST request to get current month flights after date: {}", referenceDate);
         List<AirlinesFlight> flights = flightService.getCurrentMonthFlightsAfterDate(referenceDate,fromCity,toCity);
         return ResponseEntity.ok(flights);
+    }
+
+    @GetMapping("/check-passport")
+    public ResponseEntity<PassportDTO> isPassportExist(@RequestParam(value = "passportNo") String passportNo){
+        log.info("REST request to check passport: {}", passportNo);
+        var passportDTO = flightService.isPassportExist(passportNo);
+        return passportDTO != null ? passportDTO : ResponseEntity.notFound().build();
     }
 
    /* @GetMapping("/id")

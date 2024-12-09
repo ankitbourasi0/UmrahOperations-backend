@@ -5,17 +5,16 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
+import com.umrahoperations.UmrahOperations.dto.PassportDTO;
+import com.umrahoperations.UmrahOperations.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.umrahoperations.UmrahOperations.model.AirlinesFlight;
 import com.umrahoperations.UmrahOperations.model.Airlines_Flights_Details;
 import com.umrahoperations.UmrahOperations.model.Flight;
 import com.umrahoperations.UmrahOperations.model.FlightSearchFare;
-import com.umrahoperations.UmrahOperations.repository.AirlineFlightDetailsRepository;
-import com.umrahoperations.UmrahOperations.repository.AirlinesFlightRepository;
-import com.umrahoperations.UmrahOperations.repository.FlightRepository;
-import com.umrahoperations.UmrahOperations.repository.FlightSearchFareRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +32,10 @@ public class FlightService {
 
     private final AirlinesFlightRepository airlinesFlightRepository;
 
-    private final FlightSearchFareRepository flightSearchFareRepository;;
+    private final FlightSearchFareRepository flightSearchFareRepository;
+
+    @Autowired
+    private PassportCheckRepository passportCheckRepository;
 
     public   List<AirlinesFlight> getCurrentMonthFlightsAfterDate(String referenceDate,Long fromCity,Long toCity) {
         try {
@@ -64,6 +66,26 @@ public class FlightService {
 
     public List<Flight> findAllAirports() {
         return flightRepository.findAllAirports();
+    }
+
+    public ResponseEntity<PassportDTO> isPassportExist(String passportNo) {
+    	try{
+          var passports =   passportCheckRepository.findAllPassport();
+          if (!passports.isEmpty()){
+                for (PassportDTO passport : passports){
+                    if (passport.getMt_passport().equals(passportNo)){
+                        return ResponseEntity.ok(passport);
+                    }
+                }
+
+          }
+            return ResponseEntity.notFound().build();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error in Finding Passport", e);
+        }
+
+
     }
 
    /* public List<Airlines_Flights_Details> getAirlinesFlightsDetails() {

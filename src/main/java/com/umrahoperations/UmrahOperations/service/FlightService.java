@@ -6,15 +6,11 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import com.umrahoperations.UmrahOperations.dto.PassportDTO;
+import com.umrahoperations.UmrahOperations.model.*;
 import com.umrahoperations.UmrahOperations.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import com.umrahoperations.UmrahOperations.model.AirlinesFlight;
-import com.umrahoperations.UmrahOperations.model.Airlines_Flights_Details;
-import com.umrahoperations.UmrahOperations.model.Flight;
-import com.umrahoperations.UmrahOperations.model.FlightSearchFare;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +32,10 @@ public class FlightService {
 
     @Autowired
     private PassportCheckRepository passportCheckRepository;
+
+
+    @Autowired
+    private FlightBookingRepository flightBookingRepository;
 
     public   List<AirlinesFlight> getCurrentMonthFlightsAfterDate(String referenceDate,Long fromCity,Long toCity) {
         try {
@@ -88,6 +88,20 @@ public class FlightService {
 
     }
 
+
+
+//    public void savePassengerDetails(PassengerDetails passengerDetails) {
+//        // Map the passenger details to your Passenger entity (if different)
+//        PassengerEntity passengerEntity = new PassengerEntity();
+//        // ... map fields ...
+//        passengerRepository.save(passengerEntity);
+//    }
+//    public void saveFlightDetails(FlightDetails flightDetails) {
+//        // Map the flight details to your Flight entity (if different)
+//        FlightEntity flightEntity = new FlightEntity();
+//        // ... map fields ...
+//        flightBookingRepository.save(flightEntity);
+//    }
    /* public List<Airlines_Flights_Details> getAirlinesFlightsDetails() {
         return airlineFlightDetailsRepository.getAirlinesFlightsDetails();
     }

@@ -10,7 +10,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:4173","http://localhost:4173/umrah-frontend", "http://localhost:5173",  "http://localhost:5173/umrah-frontend", "http://52.66.75.230:8080", "http://52.66.75.230:8080/umrah-frontend" ,"http://52.66.75.230",  "http://52.66.75.230/umrah-frontend","http://localhost:9090" , "http://localhost:9090/umrah-frontend")
+                .allowedOrigins("http://www.umraoperation.com","http://umraoperation.com","http://localhost:4173","http://localhost:4173/umrah-frontend", "http://localhost:5173",  "http://localhost:5173/umrah-frontend", "http://52.66.75.230:8080", "http://52.66.75.230:8080/umrah-frontend" ,"http://52.66.75.230",  "http://52.66.75.230/umrah-frontend","http://localhost:9090" , "http://localhost:9090/umrah-frontend")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(false);
